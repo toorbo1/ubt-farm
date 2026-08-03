@@ -1,0 +1,40 @@
+❌ Токен бота не найден.
+   Укажи --token, --bot 1/2 или добавь в .env: TELEGRAM_BOT_TOKEN=...
+❌ Токен бота не найден.
+   Укажи --token, --bot 1/2 или добавь в .env: TELEGRAM_BOT_TOKEN=...
+❌ Токен бота не найден.
+   Укажи --token, --bot 1/2 или добавь в .env: TELEGRAM_BOT_TOKEN=...
+❌ Токен бота не найден.
+   Укажи --token, --bot 1/2 или добавь в .env: TELEGRAM_BOT_TOKEN=...
+❌ Токен бота не найден.
+   Укажи --token, --bot 1/2 или добавь в .env: TELEGRAM_BOT_TOKEN=...
+❌ Токен бота не найден.
+   Укажи --token, --bot 1/2 или добавь в .env: TELEGRAM_BOT_TOKEN=...
+🤖 Bot 1 (основной) запущен. Напиши /start в Telegram.
+🤖 Bot 1 (основной) запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.

@@ -1,0 +1,9 @@
+total 1176
+drwxr-xr-x  2 root root   4096 Jul 29 17:41 .
+drwxr-xr-x 14 root root   4096 Jul 29 21:05 ..
+-rw-r--r--  1 root root 277324 Jul 29 22:13 bot1-error.log
+-rw-r--r--  1 root root   3506 Jul 29 22:07 bot1-out.log
+-rw-r--r--  1 root root 890933 Jul 29 22:13 bot2-error.log
+-rw-r--r--  1 root root   7552 Jul 29 22:07 bot2-out.log
+-rw-r--r--  1 root root   2208 Jul 29 17:41 bot-error.log
+-rw-r--r--  1 root root      0 Jul 29 17:41 bot-out.log

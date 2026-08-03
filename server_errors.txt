@@ -1,0 +1,30 @@
+    ^
+  File "/opt/ubt-farm/venv/lib/python3.13/site-packages/telegram/_bot.py", line 712, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/opt/ubt-farm/venv/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 378, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/opt/ubt-farm/venv/lib/python3.13/site-packages/telegram/_bot.py", line 741, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/opt/ubt-farm/venv/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/opt/ubt-farm/venv/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2026-07-29 20:03:48,284 [INFO] httpx: HTTP Request: POST https://api.telegram.org/bot8760700962:AAFHtirhjGkDQMN7nC5VthqB0e3DU2Zatjo/getUpdates "HTTP/1.1 200 OK"
+2026-07-29 20:03:58,299 [INFO] httpx: HTTP Request: POST https://api.telegram.org/bot8760700962:AAFHtirhjGkDQMN7nC5VthqB0e3DU2Zatjo/getUpdates "HTTP/1.1 200 OK"

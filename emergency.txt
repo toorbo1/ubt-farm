@@ -1,0 +1,6 @@
+def get_image_generator() -> ImageGenerator:
+    # Local pixel-art generator is the primary: guaranteed pixel art + black cat
+    return LocalFallbackGenerator()
+    # Gemini/Pollinations are optional alternates if configured:
+    # if settings.gemini_api_keys.strip():
+    #     return GeminiImageGenerator()

@@ -1,0 +1,5 @@
+301:    if builder.scenes_dir.exists():
+302:        shutil.rmtree(builder.scenes_dir)
+303:    builder.scenes_dir.mkdir(parents=True, exist_ok=True)
+666:            img_path = builder.scenes_dir / f"scene_{i:02d}.jpg"
+745:            vid_path = builder.scenes_dir / f"scene_video_{i:02d}.mp4"

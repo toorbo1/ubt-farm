@@ -1,0 +1,24 @@
+# Команды для выполнения на сервере blobby_penguin (144.31.25.159)
+# После загрузки архива через WinSCP/FileZilla
+
+# 1. Перейти в директорию проекта
+cd /opt/ubt-farm
+
+# 2. Распаковать архив
+tar xzf ubt_deploy_*.tar.gz
+
+# 3. Очистить кэш Python
+rm -rf bot/__pycache__ core/__pycache__ video_engine/__pycache__ config/__pycache__
+
+# 4. Перезапустить ботов
+pm2 restart ubt-bot1 ubt-bot2
+
+# 5. Проверить логи
+pm2 logs ubt-bot1 --lines 30
+
+# Если что-то пошло не так - откат из бекапа:
+# cd /opt/ubt-farm
+# ls backups/  # найти последний бекап
+# BACKUP_DIR="/opt/ubt-farm/backups/deploy_YYYYMMDD_HHMMSS"
+# cp "$BACKUP_DIR"/*.py . 2>/dev/null || true
+# pm2 restart ubt-bot1 ubt-bot2

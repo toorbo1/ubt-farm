@@ -1,0 +1,30 @@
+module.exports = {
+  apps: [
+    {
+      name: "ubt-bot1",
+      script: "bot/run_bot.py",
+      interpreter: "venv/bin/python3",
+      args: "--bot 1",
+      cwd: "/opt/ubt-farm",
+      error_file: "./logs/bot1-error.log",
+      out_file: "./logs/bot1-out.log",
+      merge_logs: true,
+      max_memory_restart: "500M",
+      max_restarts: 10,
+      restart_delay: 5000,
+    },
+    {
+      name: "ubt-bot2",
+      script: "bot/run_bot.py",
+      interpreter: "venv/bin/python3",
+      args: "--bot 2",
+      cwd: "/opt/ubt-farm",
+      error_file: "./logs/bot2-error.log",
+      out_file: "./logs/bot2-out.log",
+      merge_logs: true,
+      max_memory_restart: "500M",
+      max_restarts: 10,
+      restart_delay: 5000,
+    },
+  ],
+};

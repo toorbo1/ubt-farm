@@ -1,0 +1,2 @@
+/opt/ubt-farm/logs/bot2-out.log:0
+/opt/ubt-farm/logs/bot2-error.log:0

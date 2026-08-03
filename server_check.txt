@@ -1,0 +1,30 @@
+        rect(cx-2, cy+6, 1, 1, body)
+        rect(cx+2, cy+6, 1, 1, body)
+
+        # ── Sparkle particles ──
+        for _ in range(20):
+            sx = rnd.randint(1, cols-2)
+            sy = rnd.randint(1, rows-3)
+            sc = rnd.choice([(255,255,100),(100,200,255),(255,150,255),(255,255,255)])
+            rect(sx, sy, 1, 1, sc)
+            if rnd.random() < 0.3:
+                rect(sx, sy+1, 1, 1, sc)
+
+        # ── Pixel frame border (2px) ──
+        frame_col = pal[-1] if scene != "tech" else (0,150,200)
+        rect(0, 0, 1, rows, frame_col)
+        rect(0, 0, cols, 1, frame_col)
+        rect(cols-1, 0, 1, rows, frame_col)
+        rect(0, rows-1, cols, 1, frame_col)
+
+        img.save(output_path, "JPEG", quality=90)
+        return output_path
+
+
+def get_image_generator() -> ImageGenerator:
+    # Local pixel-art generator is the primary: guaranteed pixel art + black cat
+    return LocalFallbackGenerator()
+    # Gemini/Pollinations are optional alternates if configured:
+    # if settings.gemini_api_keys.strip():
+    #     return GeminiImageGenerator()
+    # return PollinationsImageGenerator()

@@ -1,0 +1,59 @@
+# 📱 ИНСТРУКЦИЯ ДЛЯ TELENA (через Termux)
+
+## ШАГ 1: Установи Termux на телефон
+Скачай из F-Droid: https://f-droid.org/packages/com.termux/
+(НЕ из Google Play!)
+
+## ШАГ 2: Скопируй эти команды в Termux:
+
+```bash
+# Обновить пакеты
+pkg update && pkg upgrade -y
+
+# Установить Python и зависимости
+pkg install python git ffmpeg openssh wget curl -y
+
+# Создать директорию для проекта
+mkdir -p ~/ubt-farm
+cd ~/ubt-farm
+
+# Клонировать проект с GitHub (или скопировать файлы)
+# Если нет GitHub — используй adb или scp
+
+# Создать виртуальное окружение
+python -m venv venv
+source venv/bin/activate
+
+# Установить зависимости
+pip install flask boto3 pydantic-settings httpx pillow
+
+# Запустить веб-сервер (порт 5001)
+python web_app/app.py --port 5001
+```
+
+## ШАГ 3: Открой на телефоне
+`http://localhost:5001`
+
+## ШАГ 4: Для доступа с ПК к телефону
+На ПК выполни:
+```bash
+adb reverse tcp:5001 tcp:5001
+```
+
+Теперь на ПК открой: `http://localhost:5001`
+
+---
+
+## 🔑 API Ключи (уже настроены):
+LLM_API_KEY=sk-smart-_0uezNrlxMhc4zZGmjZQpdAZl8adsHe2KpFgaFzcIKs
+
+Все ключи в .env файле на ПК.
+Для телефона можешь скопировать их туда же.
+
+---
+
+## Быстрый старт одной командой:
+
+```bash
+pkg update && pkg upgrade -y && pkg install python ffmpeg -y && python -m venv venv && source venv/bin/activate && pip install flask boto3 pydantic-settings httpx pillow && echo "ГОТОВО! Запусти: python web_app/app.py --port 5001"
+```

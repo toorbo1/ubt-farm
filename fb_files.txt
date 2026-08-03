@@ -1,0 +1,15 @@
+-rw-r--r-- 1 root root  41114 Jul 29 19:27 scene_05.jpg
+-rw-r--r-- 1 root root  35224 Jul 29 19:27 scene_06.jpg
+-rw-r--r-- 1 root root  88317 Jul 29 18:23 scene_video_00.mp4
+-rw-r--r-- 1 root root  10206 Jul 29 18:33 scene_video_01.mp4
+-rw-r--r-- 1 root root  18351 Jul 29 18:33 scene_video_02.mp4
+-rw-r--r-- 1 root root  12561 Jul 29 18:33 scene_video_03.mp4
+-rw-r--r-- 1 root root  14204 Jul 29 18:33 scene_video_04.mp4
+-rw-r--r-- 1 root root   2543 Jul 29 21:34 subtitles.srt
+-rw-r--r-- 1 root root 198100 Jul 29 21:34 temp_combined.mp4
+-rw-r--r-- 1 root root 972921 Jul 29 21:34 temp_looped.mp4
+-rw-r--r-- 1 root root  10423 Jul 29 18:40 test_cta.png
+-rw-r--r-- 1 root root  38869 Jul 29 18:22 test.jpg
+-rw-r--r-- 1 root root  78391 Jul 29 18:22 test.mp4
+-rw-r--r-- 1 root root  83286 Jul 29 18:40 test_out.mp4
+-rw-r--r-- 1 root root     83 Jul 29 18:40 test.srt

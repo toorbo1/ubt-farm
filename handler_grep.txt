@@ -1,0 +1,1 @@
+667:                    await builder.image_gen.generate(img_prompt, img_path)

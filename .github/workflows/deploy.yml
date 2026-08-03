@@ -1,0 +1,45 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Ручной запуск
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to server
+      run: |
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          cd /opt/ubt-farm
+
+          # Сохраняем бекап перед обновлением
+          BACKUP_DIR="/opt/ubt-farm/backups/deploy_$(date +%Y%m%d_%H%M%S)"
+          mkdir -p "$BACKUP_DIR"
+          cp -r bot config core video_engine uploader "$BACKUP_DIR/" 2>/dev/null || true
+          echo "Бэкап создан: $BACKUP_DIR"
+
+          # Pull последних изменений
+          git pull origin main
+
+          # Очистка кэша Python
+          rm -rf bot/__pycache__ core/__pycache__ video_engine/__pycache__ config/__pycache__
+
+          # Перезапуск ботов
+          pm2 restart ubt-bot1 ubt-bot2
+
+          echo "Деплой завершен успешно!"
+          pm2 logs ubt-bot1 --lines 10
+        EOF

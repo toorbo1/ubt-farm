@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from core.image_gen import get_image_generator; print(type(get_image_generator()).__name__)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/ubt-farm/core/image_gen.py", line 8, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'

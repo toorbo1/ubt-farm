@@ -1,0 +1,12 @@
+=== grep -c 'rmtree' /opt/ubt-farm/bot/handlers.py ===
+3
+
+=== grep -c 'VideoBuilder' /opt/ubt-farm/bot/handlers.py ===
+6
+
+=== ls /opt/ubt-farm/output/scenes 2>/dev/null | wc -l ===
+0
+
+=== ls /opt/ubt-farm/output/ubt_video_*.mp4 2>/dev/null | wc -l ===
+0
+

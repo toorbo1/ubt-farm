@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Видео и картинки
+output/*.mp4
+output/scenes/*
+test_output/*
+!test_output/.gitkeep
+
+# Логи
+*.log
+logs/
+
+# Временные файлы
+*.tmp
+*.bak
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env (но не .env.example!)
+.env
+!.env.example
+
+# Backups
+backups/
+*.tar.gz

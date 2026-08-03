@@ -1,0 +1,50 @@
+[AI#2] Image 1/5: scene_00.jpg
+[AI#2] Image 2/5: scene_01.jpg
+[AI#2] Image 3/5: scene_02.jpg
+[AI#2] Image 4/5: scene_03.jpg
+[AI#2] Image 5/5: scene_04.jpg
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+AI#1 ✅ Сценарий готов (5 сцен)
+Бот запущен. Напиши /start в Telegram.
+AI#1 ✅ Сценарий готов (5 сцен)
+AI#2 ✅ Картинка 1/5 готова
+AI#2 ✅ Картинка 2/5 готова
+AI#2 ✅ Картинка 3/5 готова
+AI#2 ✅ Картинка 4/5 готова
+AI#2 ✅ Картинка 5/5 готова
+AI#3 ✅ Видео 1/5 готово
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+AI#1 ✅ Сценарий готов (5 сцен)
+AI#3 ✅ Видео 2/5 готово
+AI#3 ✅ Видео 3/5 готово
+AI#3 ✅ Видео 4/5 готово
+AI#3 ✅ Видео 5/5 готово
+🔊 Аудио готово (12.6с)
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+AI#1 ✅ Сценарий готов (5 сцен)
+🔊 Аудио готово (12.6с)
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+AI#1 ✅ Сценарий готов (5 сцен)
+🔊 Аудио готово (12.6с)
+🎨 Сборка видео (ffmpeg)...
+🎬 Готово: ubt_video_20260729_184116_95767.mp4
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.
+Бот запущен. Напиши /start в Telegram.

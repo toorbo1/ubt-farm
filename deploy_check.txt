@@ -1,0 +1,14 @@
+┌────┬────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name           │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ ubt-bot1       │ default     │ N/A     │ fork    │ 1837     │ 16s    │ 3    │ online    │ 0%       │ 58.5mb   │ root     │ disabled │
+│ 1  │ ubt-bot2       │ default     │ N/A     │ fork    │ 1839     │ 16s    │ 3    │ online    │ 0%       │ 58.3mb   │ root     │ disabled │
+│ 2  │ vpn-monitor    │ default     │ 1.0.0   │ fork    │ 1616     │ 13m    │ 0    │ online    │ 0%       │ 68.1mb   │ root     │ disabled │
+└────┴────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+host metrics | cpu: 10.8% | ram usage: 34.7% | ens3: ⇓ 0.013mb/s ⇑ 0.005mb/s | disk: ⇓ 0mb/s ⇑ 0.073mb/s |
+---
+"""
+AI #2: Image generation from text prompts.
+Supports Stability AI, OpenAI DALL-E 3, and local fallback.
+"""
+from abc import ABC, abstractmethod

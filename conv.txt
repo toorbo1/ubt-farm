@@ -1,0 +1,48 @@
+10:    ConversationHandler,
+16:from video_engine.builder import VideoBuilder
+24:    batch_kb,
+106:        await handle_farm_text(update, context, text)
+123:async def handle_farm_text(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
+136:            reply_markup=batch_kb(),
+176:        asyncio.create_task(_step1_generate_text(update, context, topic))
+189:    batch_map = {
+194:    if text in batch_map:
+195:        count = batch_map[text]
+201:        asyncio.create_task(_run_batch(update, context, count))
+229:        return ConversationHandler.END
+235:    asyncio.create_task(_run_build(update, context, custom_script=text))
+236:    return ConversationHandler.END
+239:async def _run_build(
+245:    builder = VideoBuilder()
+257:        path = await builder.build(
+295:        await builder.cleanup()
+298:async def _run_batch(update: Update, context: ContextTypes.DEFAULT_TYPE, count: int) -> None:
+299:    builder = VideoBuilder()
+311:        paths = await builder.build_batch(count, progress_callback=progress)
+330:        await builder.cleanup()
+577:async def _step1_generate_text(update: Update, context: ContextTypes.DEFAULT_TYPE, topic: str) -> None:
+580:    builder = VideoBuilder()
+583:        scene_data = await builder.llm.generate_scenes(topic)
+639:        await builder.cleanup()
+642:async def _step2_generate_images(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+657:    builder = VideoBuilder()
+662:            img_path = builder.scenes_dir / f"scene_{i:02d}.jpg"
+667:                    await builder.image_gen.generate(img_prompt, img_path)
+669:                    img_path = await builder._generate_fallback_image(scene["narration"], img_path)
+714:        await builder.cleanup()
+717:async def _step3_generate_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+735:    builder = VideoBuilder()
+741:            vid_path = builder.scenes_dir / f"scene_video_{i:02d}.mp4"
+746:                    await builder.img2video.generate(img_path, scene["image_prompt"], vid_path, duration)
+748:                    vid_path = await builder._image_to_still_video(img_path, duration, vid_path)
+753:        audio_path = await builder.tts.synthesize(narration_text)
+754:        audio_duration = await builder.tts.get_audio_duration(audio_path)
+757:        track = builder.subtitle_timing.generate(narration_text, audio_duration, highlight_words)
+758:        srt_path = builder._generate_srt(track)
+761:        cta_path = builder._generate_cta_image()
+764:        output_path = builder.output_dir / f"ubt_video_{builder._timestamp()}.mp4"
+765:        await builder._assemble_ffmpeg(scene_videos, audio_path, srt_path, cta_path, output_path, audio_duration)
+796:        await builder.cleanup()
+805:        await _step2_generate_images(update, context)
+807:        await _step3_generate_video(update, context)
+820:    return ConversationHandler.END

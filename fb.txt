@@ -1,0 +1,13 @@
+                    img_path = await self._generate_fallback_image(scene["narration"], img_path)
+            image_paths.append(img_path)
+
+        # 3. AI #3: generate video from images
+        scene_videos: List[Path] = []
+        for i, (scene, img_path) in enumerate(zip(scenes, image_paths)):
+--
+    async def _generate_fallback_image(self, text: str, output_path: Path) -> Path:
+        from core.image_gen import LocalFallbackGenerator
+        gen = LocalFallbackGenerator()
+        return await gen.generate(text, output_path)
+
+    async def _image_to_still_video(

@@ -1,0 +1,8 @@
+14:class ImageGenerator(ABC):
+20:class StabilityGenerator(ImageGenerator):
+47:class DallE3Generator(ImageGenerator):
+78:class PollinationsImageGenerator(ImageGenerator):
+109:class OpenRouterImageGenerator(ImageGenerator):
+169:class GeminiImageGenerator(ImageGenerator):
+228:class LocalFallbackGenerator(ImageGenerator):
+403:def get_image_generator() -> ImageGenerator:

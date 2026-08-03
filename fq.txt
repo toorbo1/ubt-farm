@@ -1,0 +1,3 @@
+rmtree count: 3
+scenes: 0
+vids: 0

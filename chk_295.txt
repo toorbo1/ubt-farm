@@ -1,0 +1,16 @@
+        await builder.cleanup()
+
+
+async def _run_batch(update: Update, context: ContextTypes.DEFAULT_TYPE, count: int) -> None:
+    builder = VideoBuilder()
+    import shutil
+    if builder.scenes_dir.exists():
+        shutil.rmtree(builder.scenes_dir)
+    builder.scenes_dir.mkdir(parents=True, exist_ok=True)
+    chat_id = update.effective_chat.id
+
+    async def progress(msg: str) -> None:
+        try:
+            await context.bot.send_message(
+                chat_id=chat_id, text=f"\u2699 {msg}", parse_mode="Markdown"
+            )

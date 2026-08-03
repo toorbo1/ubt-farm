@@ -1,0 +1,1 @@
+        seed = int(hashlib.md5(prompt.encode()).hexdigest()[:8], 16)

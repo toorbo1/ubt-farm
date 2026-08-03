@@ -1,0 +1,23 @@
+37:def _esc(text: str) -> str:
+47:async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+63:async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+123:async def handle_farm_text(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
+223:async def custom_text_received(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+239:async def _run_build(
+248:    async def progress(msg: str) -> None:
+298:async def _run_batch(update: Update, context: ContextTypes.DEFAULT_TYPE, count: int) -> None:
+302:    async def progress(msg: str) -> None:
+333:async def _run_upload_text(update: Update, context: ContextTypes.DEFAULT_TYPE, platform: str) -> None:
+385:async def list_videos(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+404:async def farm_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+427:async def show_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+442:async def show_vpn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+450:async def _fetch_and_show_vpn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+507:async def handle_vpn_text(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
+525:async def _show_vpn_stats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+577:async def _step1_generate_text(update: Update, context: ContextTypes.DEFAULT_TYPE, topic: str) -> None:
+642:async def _step2_generate_images(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+717:async def _step3_generate_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+799:async def _handle_pipeline_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+818:async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+823:async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

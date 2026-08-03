@@ -1,0 +1,20 @@
+/opt/ubt-farm/bot/handlers.py:16:from video_engine.builder import VideoBuilder
+/opt/ubt-farm/bot/handlers.py:245:    builder = VideoBuilder()
+/opt/ubt-farm/bot/handlers.py:257:        path = await builder.build(
+/opt/ubt-farm/bot/handlers.py:295:        await builder.cleanup()
+/opt/ubt-farm/bot/handlers.py:299:    builder = VideoBuilder()
+/opt/ubt-farm/bot/handlers.py:311:        paths = await builder.build_batch(count, progress_callback=progress)
+/opt/ubt-farm/bot/handlers.py:330:        await builder.cleanup()
+/opt/ubt-farm/bot/handlers.py:580:    builder = VideoBuilder()
+/opt/ubt-farm/bot/handlers.py:583:        scene_data = await builder.llm.generate_scenes(topic)
+/opt/ubt-farm/bot/handlers.py:639:        await builder.cleanup()
+/opt/ubt-farm/bot/handlers.py:657:    builder = VideoBuilder()
+/opt/ubt-farm/bot/handlers.py:662:            img_path = builder.scenes_dir / f"scene_{i:02d}.jpg"
+/opt/ubt-farm/bot/handlers.py:667:                    await builder.image_gen.generate(img_prompt, img_path)
+/opt/ubt-farm/bot/handlers.py:669:                    img_path = await builder._generate_fallback_image(scene["narration"], img_path)
+/opt/ubt-farm/bot/handlers.py:714:        await builder.cleanup()
+/opt/ubt-farm/bot/handlers.py:735:    builder = VideoBuilder()
+/opt/ubt-farm/bot/handlers.py:741:            vid_path = builder.scenes_dir / f"scene_video_{i:02d}.mp4"
+/opt/ubt-farm/bot/handlers.py:746:                    await builder.img2video.generate(img_path, scene["image_prompt"], vid_path, duration)
+/opt/ubt-farm/bot/handlers.py:748:                    vid_path = await builder._image_to_still_video(img_path, duration, vid_path)
+/opt/ubt-farm/bot/handlers.py:753:        audio_path = await builder.tts.synthesize(narration_text)
