@@ -1,0 +1,24 @@
+build:
+  image: python:3.11-slim
+  commands:
+    - apt-get update && apt-get install -y ffmpeg curl
+    - python3 -m venv /opt/venv
+    - /opt/venv/bin/pip install -r requirements.txt
+
+run:
+  image: python:3.11-slim
+  commands:
+    - apt-get update && apt-get install -y ffmpeg
+    - /opt/venv/bin/python bot/run_bot.py --bot 1
+  env:
+    - TELEGRAM_BOT_TOKEN
+    - TELEGRAM_BOT_TOKEN_2
+    - LLM_API_KEY
+    - LLM_MODEL
+    - LLM_BASE_URL
+    - OPENROUTER_API_KEY
+    - REPLICATE_API_KEY
+    - FAL_API_KEY
+    - VPN_API_URL
+    - VPN_API_KEY
+    - GEMINI_API_KEYS
