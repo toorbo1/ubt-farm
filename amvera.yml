@@ -9,6 +9,7 @@ run:
   image: python:3.11-slim
   commands:
     - apt-get update && apt-get install -y ffmpeg
+    - mkdir -p /data && python3 setup_data_storage.py
     - /opt/venv/bin/python bot/run_bot.py --bot 1
   env:
     - TELEGRAM_BOT_TOKEN
@@ -22,3 +23,6 @@ run:
     - VPN_API_URL
     - VPN_API_KEY
     - GEMINI_API_KEYS
+  mounts:
+    - source: /data
+      target: /data
