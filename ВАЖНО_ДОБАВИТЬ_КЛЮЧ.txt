@@ -1,0 +1,38 @@
+====================================================================
+ВАЖНО! Нужно добавить SSH ключ на сервер (ОДИН РАЗ)
+====================================================================
+
+Публичный ключ для добавления на сервер:
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCOfv1zYzbBLPMgQwH2G8ZfakUPK35y9gFhnO/vKrPR0HVA2dKVDJ5VLSmptyK74yn59vTQzepMms64l+T4MkrW/tn+1UJ9wCmRO4u8u3mbVK8iPjkX6KFWdxc2B6F2+wIJcLLBYSJziX+uzZ6EQ8lFd2I4jTr2DrVpEcg15iQZ22cW9QlNbpwS+J1AYwkRaZqAFsSLZzTSzFCFzqcTn8Ztk5wAB/6D0HyIlrIinf+g+ohDogKw5NpRQc6RI/1vUGDqmovtmFVbEwAqSPu+oIK3gkhxlZxUoEbQ6cNSyYRArqyOIXHx0wrjuVoJQjrmGqBGg5pqt3CBiaVp5gExLRj/c12i6PKVuCPttSBGC4mZp9Cp5uc0dfO3C5CUwor/rpDSpKeK1kAJolzx1+kCqqimGqudoh4qpsds7DJkRI4w6KfnH1mYhI02FeJ74NSvXdpWvpFBHp8+XNwSA7TTRpx/gjnvVQhhzrQWs2zgHckiGmuh9UHYPF+BVZnl8ojx8de4KJPmErRpXwqX+Sn8se6ZfzCZLjzTY9Tr6UyD/HTQoHhlD+y6MXIcsPLrifHqNNpqXvaUVlxB0B+4K2PVbvhq35AJ8PnwqvL0mUP6COvk8/O/Zbk270pl0UnFQ/uyiYMnl/XR3iwwvVBy/qK7CuFNX4b0wTAegj+4eMeWI1b2wQ== User@DESKTOP-KU6O1TD
+
+====================================================================
+КАК ДОБАВИТЬ:
+====================================================================
+
+Способ 1: Через веб-консоль хостинга
+-----------------------------------
+1. Зайди в панель управления сервером blobby_penguin
+2. Открой консоль/терминал
+3. Выполни команду:
+   echo "ВСТАВЬ_ПУБЛИЧНЫЙ_КЛЮЧ_ВЫШЕ" >> /root/.ssh/authorized_keys
+
+Способ 2: Если есть доступ к другому серверу
+-----------------------------------
+ssh-copy-id -i C:\Users\User\.ssh\ubt_deploy_key.pub root@144.31.25.159
+
+====================================================================
+ПОСЛЕ ЭТОГО:
+====================================================================
+GitHub Actions сможет подключаться к серверу и автоматически
+деплоить изменения при каждом git push!
+
+Проверить можно сделав тестовый push:
+cd C:\Users\User\Desktop\убт
+echo "# Test" >> README.md
+git add .
+git commit -m "Test auto-deploy"
+git push
+
+Затем зайди в GitHub репозиторий → Actions → увидишь running workflow
+====================================================================
