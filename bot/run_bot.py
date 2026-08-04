@@ -43,6 +43,7 @@ from bot.handlers import (
     cancel,
     error_handler,
 )
+from bot.keyboards import topics_kb
 
 
 async def _gemini_action_wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -67,25 +68,20 @@ def build_app(token: str) -> Application:
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("menu", start))
 
-    # Главный обработчик текстовых кнопок
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
+    # Conversation для генерации сценария через DeepSeek (должен быть ДО общего обработчика)
+    async def start_gemini_script(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+        """Entry point for DeepSeek script generation."""
+        context.user_data["section"] = "gemini_script"
+        await update.message.reply_text(
+            "[INFO] Тема для сценария\n\nНапиши тему, например:\n- VPN и приватность\n- Интернет технологии\n- Кибербезопасность",
+            parse_mode="Markdown",
+            reply_markup=topics_kb()
+        )
+        return AWAIT_TOPIC
 
-    # Conversation для своего текста
-    conv_custom = ConversationHandler(
-        entry_points=[MessageHandler(filters.Regex("^✏ Свой текст$"), handle_text)],
-        states={
-            AWAIT_CUSTOM_TEXT: [
-                MessageHandler(filters.TEXT & ~filters.COMMAND, custom_text_received)
-            ],
-        },
-        fallbacks=[CommandHandler("cancel", cancel)],
-    )
-    app.add_handler(conv_custom)
-
-    # Conversation для генерации сценария через Gemini
     conv_gemini = ConversationHandler(
         entry_points=[
-            MessageHandler(filters.Regex("^✨ Сценарий \\(Gemini\\)$"), handle_text),
+            MessageHandler(filters.Regex("^Создать сценарий$"), start_gemini_script),
         ],
         states={
             AWAIT_TOPIC: [
@@ -104,6 +100,21 @@ def build_app(token: str) -> Application:
         fallbacks=[CommandHandler("cancel", cancel)],
     )
     app.add_handler(conv_gemini)
+
+    # Conversation для своего текста
+    conv_custom = ConversationHandler(
+        entry_points=[MessageHandler(filters.Regex("^✏ Свой текст$"), handle_text)],
+        states={
+            AWAIT_CUSTOM_TEXT: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, custom_text_received)
+            ],
+        },
+        fallbacks=[CommandHandler("cancel", cancel)],
+    )
+    app.add_handler(conv_custom)
+
+    # Главный обработчик текстовых кнопок (после ConversationHandler'ов)
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 
     # Inline-кнопки: пайплайн
     app.add_handler(CallbackQueryHandler(_handle_pipeline_callback, pattern="^pipe_"))

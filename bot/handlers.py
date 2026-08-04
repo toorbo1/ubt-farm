@@ -33,6 +33,7 @@ from .keyboards import (
     vpn_servers_inline,
     ai_models_kb,
     video_provider_kb,
+    gemini_script_kb,
 )
 from .vpn_handlers import vpn_fetch_data
 from core.gemini_client import GeminiClient
@@ -152,14 +153,15 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await update.message.reply_text("Главное меню:", reply_markup=main_kb())
         return
 
-    if text == "✨ Создать сценарий":
-        context.user_data["section"] = "gemini_script"
-        await update.message.reply_text(
-            "📝 *Тема для сценария*\n\nНапиши тему, например:\n• VPN и приватность\n• Интернет технологии\n• Кибербезопасность",
-            parse_mode="Markdown",
-            reply_markup=topics_kb()
-        )
-        return
+    # "✨ Создать сценарий" теперь обрабатывается через ConversationHandler
+    # если text == "✨ Создать сценарий":
+    #     context.user_data["section"] = "gemini_script"
+    #     await update.message.reply_text(
+    #         "📝 *Тема для сценария*\n\nНапиши тему, например:\n• VPN и приватность\n• Интернет технологии\n• Кибербезопасность",
+    #         parse_mode="Markdown",
+    #         reply_markup=topics_kb()
+    #     )
+    #     return
 
     if text == "🎬 Создать видео":
         context.user_data["section"] = S_FARM
@@ -202,10 +204,10 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         return
 
     # Если ничего не подошло
-    await update.message.reply_text(
-        "Используй кнопки внизу экрана ⬇",
-        reply_markup=main_kb(),
-    )
+    # await update.message.reply_text(
+    #     "Используй кнопки внизу экрана ⬇",
+    #     reply_markup=main_kb(),
+    # )
 
 
 # ==================== ФЕРМА ВИДЕО ====================
@@ -495,8 +497,8 @@ async def handle_models_text(update: Update, context: ContextTypes.DEFAULT_TYPE,
             )
             return
 
-    await update.message.reply_text("Используй кнопки ⬇",
-                                    reply_markup=ai_models_kb())
+    # await update.message.reply_text("Используй кнопки ⬇",
+    #                                 reply_markup=ai_models_kb())
 
 
 async def toggle_pipeline(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -841,7 +843,7 @@ async def handle_gemini_traits(update: Update, context: ContextTypes.DEFAULT_TYP
     chat_id = update.effective_chat.id
     await context.bot.send_message(
         chat_id=chat_id,
-        text=f"\u2728 \u0413\u0435\u043d\u0435\u0440\u0438\u0440\u0443\u044e \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439 \u043d\u0430 \u0442\u0435\u043c\u0443 *\u00ab{_esc(topic)}\u00bb*...",
+        text=f"[INFO] \u0413\u0435\u043d\u0435\u0440\u0438\u0440\u0443\u044e \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439 \u043d\u0430 \u0442\u0435\u043c\u0443 \u00ab{_esc(topic)}\u00bb...",
         parse_mode="Markdown",
         reply_markup=remove_kb(),
     )
@@ -856,9 +858,9 @@ async def handle_gemini_traits(update: Update, context: ContextTypes.DEFAULT_TYP
         highlights = script.get("highlight_words", [])
         script_text = script.get("text", "")
 
-        msg = f"\u2728 *\u0421\u0426\u0415\u041d\u0410\u0420\u0418\u0419*\n\n"
+        msg = f"[INFO] *\u0421\u0426\u0415\u041d\u0410\u0420\u0418\u0419*\n\n"
         if hook:
-            msg += f"\ud83c\udfa3 Hook: `{_esc(hook)}`\n\n"
+            msg += f"Hook: `{_esc(hook)}`\n\n"
         msg += f"`{_esc(script_text)}`\n\n"
         if highlights:
             msg += f" \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u0441\u043b\u043e\u0432\u0430: {', '.join(f'`{h}`' for h in highlights)}\n"
@@ -875,7 +877,7 @@ async def handle_gemini_traits(update: Update, context: ContextTypes.DEFAULT_TYP
     except Exception as e:
         await context.bot.send_message(
             chat_id=chat_id,
-            text=f"\u274c \u041e\u0448\u0438\u0431\u043a\u0430 \u0433\u0435\u043d\u0435\u0440\u0430\u0446\u0438\u0438: `{_esc(str(e))}`\n\u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439 \u0435\u0449\u0451 \u0440\u0430\u0437.",
+            text=f"[ERROR] \u041e\u0448\u0438\u0431\u043a\u0430 \u0433\u0435\u043d\u0435\u0440\u0430\u0446\u0438\u0438: `{_esc(str(e))}`\n\u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439 \u0435\u0449\u0451 \u0440\u0430\u0437.",
             parse_mode="Markdown",
             reply_markup=farm_kb(),
         )
@@ -889,10 +891,10 @@ async def handle_gemini_action(update: Update, context: ContextTypes.DEFAULT_TYP
     traits = context.user_data.get("gemini_traits")
     old_text = context.user_data.get("gemini_script_text", "")
 
-    if text == "\ud83d\udd04 \u041f\u0435\u0440\u0435\u0434\u0435\u043b\u0430\u0442\u044c":
+    if text == "\u041f\u0435\u0440\u0435\u0434\u0435\u043b\u0430\u0442\u044c":
         await context.bot.send_message(
             chat_id=chat_id,
-            text="\u2728 \u041f\u0435\u0440\u0435\u0433\u0435\u043d\u0435\u0440\u0438\u0440\u0443\u044e \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439...",
+            text="[INFO] \u041f\u0435\u0440\u0435\u0433\u0435\u043d\u0435\u0440\u0438\u0440\u0443\u044e \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439...",
             reply_markup=remove_kb(),
         )
         try:
@@ -905,12 +907,12 @@ async def handle_gemini_action(update: Update, context: ContextTypes.DEFAULT_TYP
             highlights = script.get("highlight_words", [])
             text_content = script.get("text", "")
 
-            msg = f"\u2728 *\u041d\u041e\u0412\u042b\u0419 \u0421\u0426\u0415\u041d\u0410\u0420\u0418\u0419*\n\n"
+            msg = f"[INFO] *\u041d\u041e\u0412\u042b\u0419 \u0421\u0426\u0415\u041d\u0410\u0420\u0418\u0419*\n\n"
             if hook:
-                msg += f"\ud83c\udfa3 Hook: `{_esc(hook)}`\n\n"
+                msg += f"Hook: `{_esc(hook)}`\n\n"
             msg += f"`{_esc(text_content)}`\n\n"
             if highlights:
-                msg += f"\ud83d\udd11 \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u0441\u043b\u043e\u0432\u0430: {', '.join(f'`{h}`' for h in highlights)}\n"
+                msg += f"\u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u0441\u043b\u043e\u0432\u0430: {', '.join(f'`{h}`' for h in highlights)}\n"
             msg += "\n\u0427\u0442\u043e \u0434\u0435\u043b\u0430\u0435\u043c \u0434\u0430\u043b\u044c\u0448\u0435?"
 
             await context.bot.send_message(
@@ -923,16 +925,16 @@ async def handle_gemini_action(update: Update, context: ContextTypes.DEFAULT_TYP
         except Exception as e:
             await context.bot.send_message(
                 chat_id=chat_id,
-                text=f"\u274c \u041e\u0448\u0438\u0431\u043a\u0430: `{_esc(str(e))}`",
+                text=f"[ERROR] \u041e\u0448\u0438\u0431\u043a\u0430: `{_esc(str(e))}`",
                 parse_mode="Markdown",
                 reply_markup=gemini_script_kb(),
             )
             return AWAIT_SCRIPT_ACTION
 
-    if text == "\u270f\ufe0f \u0421\u0432\u043e\u0439 \u0442\u0435\u043a\u0441\u0442":
+    if text == "\u0421\u0432\u043e\u0439 \u0442\u0435\u043a\u0441\u0442":
         await context.bot.send_message(
             chat_id=chat_id,
-            text="\u270f\ufe0f \u041d\u0430\u043f\u0438\u0448\u0438 **\u0441\u0432\u043e\u0439 \u0442\u0435\u043a\u0441\u0442 \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u044f** (\u0438\u043b\u0438 /cancel):",
+            text="[INFO] \u041d\u0430\u043f\u0438\u0448\u0438 \u0441\u0432\u043e\u0439 \u0442\u0435\u043a\u0441\u0442 \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u044f (\u0438\u043b\u0438 /cancel):",
             parse_mode="Markdown",
             reply_markup=remove_kb(),
         )

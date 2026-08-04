@@ -35,6 +35,16 @@ logs/
 .env
 !.env.example
 
+# Secrets - never commit these
+core/gemini_client.py
+core/groq_client.py
+update_gemini_key.ps1
+*_page.png
+test_gen.py
+test_groq.py
+local_bot_app.py
+ГОТОВО_*.txt
+
 # Backups
 backups/
 *.tar.gz
