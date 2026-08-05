@@ -6,6 +6,48 @@ const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 // Хранилище данных пользователей (в реальном проекте используйте БД)
 const userData = {};
 
+// Функция проверки статуса подписки пользователя
+function getUserSubscriptionStatus(userId) {
+  const user = userData[userId];
+  if (!user || !user.subscription) {
+    return 'none'; // Нет подписки
+  }
+
+  const now = new Date();
+  const endDate = new Date(user.subscription.endDate);
+
+  if (now > endDate) {
+    return 'expired'; // Подписка истекла
+  }
+
+  return 'active'; // Подписка активна
+}
+
+// Функция форматирования даты окончания подписки
+function formatEndDate(endDate) {
+  const date = new Date(endDate);
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  return date.toLocaleDateString('ru-RU', options);
+}
+
+// Функция получения информации о подписке
+function getSubscriptionInfo(userId) {
+  const user = userData[userId];
+  if (!user || !user.subscription) {
+    return null;
+  }
+
+  const sub = user.subscription;
+  const daysLeft = Math.ceil((new Date(sub.endDate) - new Date()) / (1000 * 60 * 60 * 24));
+
+  return {
+    days: sub.duration || 30,
+    devices: sub.devices || 5,
+    endDate: sub.endDate,
+    daysLeft: daysLeft > 0 ? daysLeft : 0
+  };
+}
+
 // Отслеживаем сообщения бота для удаления
 const botMessages = {}; // { chatId: [messageId1, messageId2, ...] }
 
@@ -179,11 +221,50 @@ const STICKERS = {
 // Приветственное сообщение (3 отдельных сообщения: стикер + текст + кнопки)
 bot.onText(/^\/start$/, async (msg) => {
   const chatId = msg.chat.id;
+  const userId = msg.from.id;
   const messageId = msg.message_id;
-  const welcomeMessage = `Привет!`;
 
   // Удаляем старые сообщения бота
   await deleteAllBotMessages(chatId);
+
+  // Проверяем статус подписки
+  const subStatus = getUserSubscriptionStatus(userId);
+
+  let textMessage, buttonsMessage;
+
+  if (subStatus === 'active') {
+    // Пользователь с активной подпиской
+    const subInfo = getSubscriptionInfo(userId);
+    const endDateStr = formatEndDate(subInfo.endDate);
+
+    textMessage = `Твоя подписка на VenturaVPN уже активна!
+Вот что у тебя сейчас:
+
+📆 Подписка: ${subInfo.days} дней
+📱 Устройств: до ${subInfo.devices}
+⏳ Действует до: ${endDateStr}
+
+Наслаждайся свободным интернетом, быстрой скоростью и надёжной защитой 😉
+
+Если будут вопросы — я рядом ❤️`;
+
+    buttonsMessage = 'Выбирай, что интересно:';
+  } else {
+    // Пользователь без подписки или с истекшей
+    textMessage = `Привееет! Каролина на связи ✨
+
+Скажи «нет» блокировкам и «да» скорости!
+VenturaVPN — топ-1 VPN в РФ, и я знаю, почему:
+
+🌍 серверы по всему миру
+⚡️ суперскорость
+🛡️ твоя приватность — наш приоритет
+💰 цены, которые радуют
+
+Готов начать? Просто выбери тариф и жми «Подключиться» 😉`;
+
+    buttonsMessage = 'Выбирай, что интересно:';
+  }
 
   // 1. Отправляем стикер если есть ID
   const stickerId = process.env.WELCOME_STICKER_ID;
@@ -197,11 +278,11 @@ bot.onText(/^\/start$/, async (msg) => {
   }
 
   // 2. Отправляем текст
-  const textMsg = await bot.sendMessage(chatId, welcomeMessage);
+  const textMsg = await bot.sendMessage(chatId, textMessage);
   saveBotMessageId(chatId, textMsg.message_id);
 
   // 3. Отправляем кнопки
-  const buttonsMsg = await bot.sendMessage(chatId, 'Выбирай, что интересно:', mainMenu);
+  const buttonsMsg = await bot.sendMessage(chatId, buttonsMessage, mainMenu);
   saveBotMessageId(chatId, buttonsMsg.message_id);
 });
 
@@ -355,27 +436,311 @@ ${referralLink}`;
 
     case 'home': {
       await simulateLoading(800, async () => {
-        const welcomeMessage = `Привет!`;
-        await sendWelcomeMessages(chatId, messageId, welcomeMessage, 'Выбирай, что интересно:', STICKERS.WELCOME, mainMenu);
+        const userId = query.from.id;
+        const subStatus = getUserSubscriptionStatus(userId);
+
+        let textMessage;
+
+        if (subStatus === 'active') {
+          const subInfo = getSubscriptionInfo(userId);
+          const endDateStr = formatEndDate(subInfo.endDate);
+
+          textMessage = `Твоя подписка на VenturaVPN уже активна!
+Вот что у тебя сейчас:
+
+📆 Подписка: ${subInfo.days} дней
+📱 Устройств: до ${subInfo.devices}
+⏳ Действует до: ${endDateStr}
+
+Наслаждайся свободным интернетом, быстрой скоростью и надёжной защитой 😉
+
+Если будут вопросы — я рядом ❤️`;
+        } else {
+          textMessage = `Привееет! Каролина на связи ✨
+
+Скажи «нет» блокировкам и «да» скорости!
+VenturaVPN — топ-1 VPN в РФ, и я знаю, почему:
+
+🌍 серверы по всему миру
+⚡️ суперскорость
+🛡️ твоя приватность — наш приоритет
+💰 цены, которые радуют
+
+Готов начать? Просто выбери тариф и жми «Подключиться» 😉`;
+        }
+
+        await sendWelcomeMessages(chatId, messageId, textMessage, 'Выбирай, что интересно:', STICKERS.WELCOME, mainMenu);
       });
       break;
     }
 
-    case 'sub_1m':
-    case 'sub_6m':
-    case 'sub_12m':
-    case 'renew':
-    case 'key':
-    case 'devices':
-    case 'servers':
-    case 'link_accounts':
-    case 'help_key':
-    case 'help_server':
-    case 'help_payment':
-    case 'human_support': {
-      // Заглушки для остальных кнопок
+    case 'sub_1m': {
       await simulateLoading(1000, async () => {
-        await replaceMessage(chatId, messageId, 'Скоро здесь появится ответ! 😊', mainMenu);
+        const userId = query.from.id;
+        // Сохраняем информацию о подписке (в реальном проекте используйте БД)
+        if (!userData[userId]) {
+          userData[userId] = {};
+        }
+
+        const now = new Date();
+        const endDate = new Date(now);
+        endDate.setMonth(endDate.getMonth() + 1);
+
+        userData[userId].subscription = {
+          type: '1 месяц',
+          duration: 30,
+          devices: 5,
+          startDate: now.toISOString(),
+          endDate: endDate.toISOString(),
+          price: 299
+        };
+
+        const endDateStr = formatEndDate(endDate);
+
+        const message = `✅ Подписка оформлена!
+
+📆 Подписка: 30 дней
+📱 Устройств: до 5
+⏳ Действует до: ${endDateStr}
+
+Наслаждайся свободным интернетом, быстрой скоростью и надёжной защитой 😉
+
+Если будут вопросы — я рядом ❤️`;
+
+        await replaceMessage(chatId, messageId, message, mainMenu);
+      });
+      break;
+    }
+
+    case 'sub_6m': {
+      await simulateLoading(1000, async () => {
+        const userId = query.from.id;
+        if (!userData[userId]) {
+          userData[userId] = {};
+        }
+
+        const now = new Date();
+        const endDate = new Date(now);
+        endDate.setMonth(endDate.getMonth() + 6);
+
+        userData[userId].subscription = {
+          type: '6 месяцев',
+          duration: 180,
+          devices: 5,
+          startDate: now.toISOString(),
+          endDate: endDate.toISOString(),
+          price: 1499
+        };
+
+        const endDateStr = formatEndDate(endDate);
+
+        const message = `✅ Подписка оформлена!
+
+📆 Подписка: 180 дней
+📱 Устройств: до 5
+⏳ Действует до: ${endDateStr}
+
+Наслаждайся свободным интернетом, быстрой скоростью и надёжной защитой 😉
+
+Если будут вопросы — я рядом ❤️`;
+
+        await replaceMessage(chatId, messageId, message, mainMenu);
+      });
+      break;
+    }
+
+    case 'sub_12m': {
+      await simulateLoading(1000, async () => {
+        const userId = query.from.id;
+        if (!userData[userId]) {
+          userData[userId] = {};
+        }
+
+        const now = new Date();
+        const endDate = new Date(now);
+        endDate.setFullYear(endDate.getFullYear() + 1);
+
+        userData[userId].subscription = {
+          type: '12 месяцев',
+          duration: 365,
+          devices: 5,
+          startDate: now.toISOString(),
+          endDate: endDate.toISOString(),
+          price: 2499
+        };
+
+        const endDateStr = formatEndDate(endDate);
+
+        const message = `✅ Подписка оформлена!
+
+📆 Подписка: 365 дней
+📱 Устройств: до 5
+⏳ Действует до: ${endDateStr}
+
+Наслаждайся свободным интернетом, быстрой скоростью и надёжной защитой 😉
+
+Если будут вопросы — я рядом ❤️`;
+
+        await replaceMessage(chatId, messageId, message, mainMenu);
+      });
+      break;
+    }
+
+    case 'renew': {
+      await simulateLoading(1000, async () => {
+        const userId = query.from.id;
+        const subStatus = getUserSubscriptionStatus(userId);
+
+        if (subStatus === 'active') {
+          const user = userData[userId];
+          const currentEnd = new Date(user.subscription.endDate);
+          const newEnd = new Date(currentEnd);
+          newEnd.setMonth(newEnd.getMonth() + 1);
+
+          user.subscription.endDate = newEnd.toISOString();
+          const endDateStr = formatEndDate(newEnd);
+
+          const message = `✅ Подписка продлена!
+
+⏳ Теперь действует до: ${endDateStr}
+
+Продолжай наслаждаться свободным интернетом! 🚀`;
+
+          await replaceMessage(chatId, messageId, message, mainMenu);
+        } else {
+          await replaceMessage(chatId, messageId, 'У вас нет активной подписки. Выберите новый тариф:', subscriptionMenu);
+        }
+      });
+      break;
+    }
+
+    case 'key': {
+      await simulateLoading(1000, async () => {
+        const userId = query.from.id;
+        const subStatus = getUserSubscriptionStatus(userId);
+
+        if (subStatus === 'active') {
+          const key = `VENTURA-${userId}-${Date.now().toString(36).toUpperCase()}`;
+          const message = `🔑 Твой ключ доступа:
+
+\`${key}\`
+
+Скопируй его и используй в приложении VenturaVPN для подключения.`;
+
+          await replaceMessage(chatId, messageId, message);
+        } else {
+          const message = 'У тебя нет активной подписки. Сначала оформи подписку 💎';
+          await replaceMessage(chatId, messageId, message, subscriptionMenu);
+        }
+      });
+      break;
+    }
+
+    case 'devices': {
+      await simulateLoading(1000, async () => {
+        const userId = query.from.id;
+        const subStatus = getUserSubscriptionStatus(userId);
+
+        if (subStatus === 'active') {
+          const subInfo = getSubscriptionInfo(userId);
+          const message = `📱 Твои устройства
+
+Подключено: 0 из ${subInfo.devices} устройств
+
+Управляй подключенными устройствами в личном кабинете.`;
+
+          await replaceMessage(chatId, messageId, message, accessMenu);
+        } else {
+          await replaceMessage(chatId, messageId, 'У тебя нет активной подписки. Оформите подписку 💎', subscriptionMenu);
+        }
+      });
+      break;
+    }
+
+    case 'servers': {
+      await simulateLoading(1000, async () => {
+        const message = `🌎 Доступные серверы
+
+🇩🇪 Германия - Франкфурт
+🇳🇱 Нидерланды - Амстердам
+🇺🇸 США - Нью-Йорк
+🇬🇧 Великобритания - Лондон
+🇫🇷 Франция - Париж
+
+Выбери сервер для подключения:`;
+
+        await replaceMessage(chatId, messageId, message);
+      });
+      break;
+    }
+
+    case 'link_accounts': {
+      await simulateLoading(1000, async () => {
+        const message = `♻️ Связать аккаунты
+
+Эта функция позволит синхронизировать настройки между устройствами.
+
+Скоро будет доступна! 🚀`;
+
+        await replaceMessage(chatId, messageId, message, accessMenu);
+      });
+      break;
+    }
+
+    case 'help_key': {
+      await simulateLoading(1000, async () => {
+        const message = `🔑 Не работает ключ
+
+Попробуй:
+1. Скопировать ключ заново
+2. Проверить подключение к интернету
+3. Перезапустить приложение
+
+Если проблема не решена — напиши в поддержку:`;
+
+        await replaceMessage(chatId, messageId, message, helpMenu);
+      });
+      break;
+    }
+
+    case 'help_server': {
+      await simulateLoading(1000, async () => {
+        const message = `🌍 Не подключается сервер
+
+Попробуй:
+1. Выбрать другой сервер
+2. Проверить подключение к интернету
+3. Перезапустить VPN приложение
+
+Если проблема не решена — напиши в поддержку:`;
+
+        await replaceMessage(chatId, messageId, message, helpMenu);
+      });
+      break;
+    }
+
+    case 'help_payment': {
+      await simulateLoading(1000, async () => {
+        const message = `💳 Вопрос по оплате
+
+Если у тебя возникли вопросы по оплате или нужны чеки — напиши в поддержку:`;
+
+        await replaceMessage(chatId, messageId, message, helpMenu);
+      });
+      break;
+    }
+
+    case 'human_support': {
+      await simulateLoading(1000, async () => {
+        const message = `💬 Связаться с человеком
+
+Наша команда поддержки готова помочь тебе!
+
+Напиши нам в Telegram: @VenturaVPNSupport
+
+Мы на связи с 9:00 до 21:00 МСК ⏰`;
+
+        await replaceMessage(chatId, messageId, message, helpMenu);
       });
       break;
     }

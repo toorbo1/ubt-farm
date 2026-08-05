@@ -1,0 +1,26 @@
+{
+  "name": "venturavpn-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for VenturaVPN service",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js",
+    "test": "node test_subscription.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "vpn",
+    "subscription"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.63.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
