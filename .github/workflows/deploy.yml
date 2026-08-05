@@ -27,7 +27,10 @@ jobs:
         SERVER_USER: ${{ secrets.SERVER_USER }}
         SERVER_HOST: ${{ secrets.SERVER_HOST }}
       run: |
-        ssh ${SERVER_USER}@${SERVER_HOST} << 'EOF'
+        ssh -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -i ~/.ssh/id_rsa \
+            ${SERVER_USER}@${SERVER_HOST} << 'EOF'
           cd /opt/ubt-farm
 
           # Сохраняем бекап перед обновлением
