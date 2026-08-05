@@ -1,0 +1,28 @@
+name: Test SSH Connection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo "Key format:"
+        head -1 ~/.ssh/id_rsa
+
+    - name: Test SSH connection
+      env:
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+        SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      run: |
+        ssh -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -i ~/.ssh/id_rsa \
+            ${SERVER_USER}@${SERVER_HOST} \
+            "echo 'SSH connection successful!'"
