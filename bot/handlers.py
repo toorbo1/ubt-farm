@@ -34,6 +34,7 @@ from .keyboards import (
     ai_models_kb,
     video_provider_kb,
     gemini_script_kb,
+    about_ventura_kb,
 )
 from .vpn_handlers import vpn_fetch_data
 from core.gemini_client import GeminiClient
@@ -121,21 +122,42 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         context.user_data.pop("gemini_traits", None)
         context.user_data.pop("gemini_script", None)
         context.user_data.pop("gemini_script_text", None)
-        await update.message.reply_text(
-            "Главное меню:", reply_markup=main_kb()
-        )
+        try:
+            await update.message.edit_text(
+                "Главное меню:", reply_markup=main_kb()
+            )
+        except Exception:
+            await update.message.reply_text(
+                "Главное меню:", reply_markup=main_kb()
+            )
         return
 
     if text == "🔙 Назад":
+        if section == "about":
+            context.user_data["section"] = S_MAIN
+            # Редактируем текущее сообщение вместо создания нового
+            try:
+                await update.message.edit_text(
+                    "Главное меню:",
+                    reply_markup=main_kb(),
+                )
+            except Exception:
+                await update.message.reply_text("Главное меню:", reply_markup=main_kb())
+            return
         if section == "gemini_script":
             context.user_data["section"] = S_FARM
             context.user_data.pop("gemini_topic", None)
             context.user_data.pop("gemini_traits", None)
             context.user_data.pop("gemini_script", None)
             context.user_data.pop("gemini_script_text", None)
-            await update.message.reply_text(
-                "🎬 *Ферма видео*", parse_mode="Markdown", reply_markup=farm_kb()
-            )
+            try:
+                await update.message.edit_text(
+                    "🎬 *Ферма видео*", parse_mode="Markdown", reply_markup=farm_kb()
+                )
+            except Exception:
+                await update.message.reply_text(
+                    "🎬 *Ферма видео*", parse_mode="Markdown", reply_markup=farm_kb()
+                )
             return
         if section == S_MODELS and context.user_data.get("models_view"):
             # Из списка провайдеров — обратно в меню моделей, не в ферму.
@@ -143,14 +165,22 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await show_models_menu(update, context)
         elif section in (S_FARM, S_MODELS):
             context.user_data["section"] = S_FARM
-            await update.message.reply_text(
-                "🎬 *Ферма видео*", parse_mode="Markdown", reply_markup=farm_kb()
-            )
+            try:
+                await update.message.edit_text(
+                    "🎬 *Ферма видео*", parse_mode="Markdown", reply_markup=farm_kb()
+                )
+            except Exception:
+                await update.message.reply_text(
+                    "🎬 *Ферма видео*", parse_mode="Markdown", reply_markup=farm_kb()
+                )
         elif section == S_VPN:
             context.user_data["section"] = S_VPN
             await show_vpn(update, context)
         else:
-            await update.message.reply_text("Главное меню:", reply_markup=main_kb())
+            try:
+                await update.message.edit_text("Главное меню:", reply_markup=main_kb())
+            except Exception:
+                await update.message.reply_text("Главное меню:", reply_markup=main_kb())
         return
 
     # "✨ Создать сценарий" теперь обрабатывается через ConversationHandler
@@ -196,6 +226,40 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     if text == "📊 Статус":
         await update.message.reply_text("📊 *Статус*\n\nБот готов к работе!")
+        return
+
+    if text == "ℹ️ О Ventura":
+        context.user_data["section"] = "about"
+        # Редактируем текущее сообщение вместо создания нового
+        try:
+            await update.message.edit_text(
+                f"ℹ️ *О Ventura*\n\n"
+                f"Ventura — это бот для создания вирусных видео с помощью ИИ.\n\n"
+                f"✨ *Возможности:*\n"
+                f"• Генерация сценариев через Gemini AI\n"
+                f"• Создание изображений\n"
+                f"• Сборка видео с озвучкой\n"
+                f"• Пакетная обработка\n"
+                f"• Загрузка на платформы\n\n"
+                f"Нажми '🔙 Назад' чтобы вернуться.",
+                parse_mode="Markdown",
+                reply_markup=about_ventura_kb(),
+            )
+        except Exception:
+            # Если не удалось редактировать, отправляем новое
+            await update.message.reply_text(
+                f"ℹ️ *О Ventura*\n\n"
+                f"Ventura — это бот для создания вирусных видео с помощью ИИ.\n\n"
+                f"✨ *Возможности:*\n"
+                f"• Генерация сценариев через Gemini AI\n"
+                f"• Создание изображений\n"
+                f"• Сборка видео с озвучкой\n"
+                f"• Пакетная обработка\n"
+                f"• Загрузка на платформы\n\n"
+                f"Нажми '🔙 Назад' чтобы вернуться.",
+                parse_mode="Markdown",
+                reply_markup=about_ventura_kb(),
+            )
         return
 
     if text == "⚙ Настройки AI":

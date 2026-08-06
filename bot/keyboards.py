@@ -4,9 +4,9 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardMar
 def main_kb() -> ReplyKeyboardMarkup:
     kb = [
         ["✨ Создать сценарий", "🎬 Создать видео"],
-        [" Пакет видео", "📤 Загрузить"],
+        ["📦 Пакет видео", "📤 Загрузить"],
         ["📁 Список видео", "📊 Статус"],
-        ["⚙ Настройки AI"],
+        ["⚙ Настройки AI", "ℹ️ О Ventura"],
     ]
     return ReplyKeyboardMarkup(kb, resize_keyboard=True)
 
@@ -27,6 +27,7 @@ def farm_kb() -> ReplyKeyboardMarkup:
     kb = [
         ["✨ Создать сценарий", "🎬 Создать видео"],
         ["📦 Пакет видео", "📤 Загрузить"],
+        ["ℹ️ О Ventura"],
         ["🔙 В главное меню"],
     ]
     return ReplyKeyboardMarkup(kb, resize_keyboard=True)
@@ -45,6 +46,7 @@ def ai_models_kb() -> ReplyKeyboardMarkup:
     kb = [
         ["🧠 Сценарий (LLM)", "🖼 Картинки (Image)"],
         ["🎥 Видео (Video)", "⚙ Локальные настройки"],
+        ["ℹ️ О Ventura"],
         ["🔙 В ферму"],
     ]
     return ReplyKeyboardMarkup(kb, resize_keyboard=True)
@@ -103,6 +105,14 @@ def done_kb() -> ReplyKeyboardMarkup:
 
 def remove_kb() -> ReplyKeyboardRemove:
     return ReplyKeyboardRemove()
+
+
+def about_ventura_kb() -> ReplyKeyboardMarkup:
+    """Клавиатура для экрана 'О Ventura' — только кнопка Назад."""
+    kb = [
+        ["🔙 Назад"],
+    ]
+    return ReplyKeyboardMarkup(kb, resize_keyboard=True)
 
 
 def vpn_servers_inline(servers: list[dict]) -> InlineKeyboardMarkup:
