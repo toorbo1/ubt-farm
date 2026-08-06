@@ -18,8 +18,6 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        # Debug: show key format (first line)
-        head -1 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
     - name: Deploy to server
@@ -36,24 +34,21 @@ jobs:
           # Сохраняем бекап перед обновлением
           BACKUP_DIR="/opt/ubt-farm/backups/deploy_$(date +%Y%m%d_%H%M%S)"
           mkdir -p "$BACKUP_DIR"
-          cp -r bot config core video_engine uploader "$BACKUP_DIR/" 2>/dev/null || true
+          cp bot/*.py "$BACKUP_DIR/" 2>/dev/null || true
           echo "Бэкап создан: $BACKUP_DIR"
 
           # Pull последних изменений
           git pull origin main
 
-          # Установка зависимостей
+          # Установка Python зависимостей
           if [ -f requirements.txt ]; then
-            source venv/bin/activate 2>/dev/null || python3 -m venv venv
-            pip install -r requirements.txt --quiet
+            source venv/bin/activate
+            pip install -q -r requirements.txt
           fi
 
-          # Очистка кэша Python
-          rm -rf bot/__pycache__ core/__pycache__ video_engine/__pycache__ config/__pycache__
-
-          # Перезапуск ботов
-          pm2 restart ubt-bot1 ubt-bot2
+          # Перезапуск бота (Python)
+          pm2 restart ubt-bot1 ubt-bot2 || pm2 restart all
 
           echo "Деплой завершен успешно!"
-          pm2 logs ubt-bot1 --lines 10
+          pm2 logs --lines 10
         EOF
