@@ -92,7 +92,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         f"\n"
         f"Просто нажимай кнопки внизу ⬇",
         parse_mode="Markdown",
-        reply_markup=about_ventura_inline(),
+        reply_markup=main_kb(),
     )
 
 
@@ -1064,15 +1064,18 @@ async def about_ventura_handler(update: Update, context: ContextTypes.DEFAULT_TY
     await query.answer()
 
     text = (
-        f"ℹ️ *О Ventura*\n\n"
-        f"Ventura — это бот для создания вирусных видео с помощью ИИ.\n\n"
-        f"✨ *Возможности:*\n"
-        f"• Генерация сценариев через Gemini AI\n"
-        f"• Создание изображений\n"
-        f"• Сборка видео с озвучкой\n"
-        f"• Пакетная обработка\n"
-        f"• Загрузка на платформы\n\n"
-        f"Нажми '🔙 Назад' чтобы вернуться."
+        f"*VenturaVPN — интернет без границ.*\n\n"
+        f"VenturaVPN — это быстрый и надёжный VPN-сервис для тех, кто ценит свободу в сети. Мы используем качественные серверы и собственные белые IP-адреса, чтобы обеспечить стабильное соединение, высокую скорость и минимальные задержки.\n\n"
+        f"С VenturaVPN вы сможете:\n"
+        f"• Обходить блокировки и ограничения.\n"
+        f"• Защищать свои данные в общественных Wi-Fi сетях.\n"
+        f"• Смотреть любимые сервисы без лишних препятствий.\n"
+        f"• Пользоваться интернетом быстро и безопасно.\n\n"
+        f"⚡️ Высокая скорость\n"
+        f"🔒 Надёжная защита данных\n"
+        f"🌍 Серверы в разных странах\n"
+        f"📱 Поддержка всех популярных устройств\n\n"
+        f"VenturaVPN — когда нужен интернет таким, каким он должен быть."
     )
 
     # Редактируем сообщение вместо создания нового
@@ -1087,17 +1090,13 @@ async def about_ventura_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def about_ventura_back_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Обработчик inline-кнопки 'Назад' из экрана 'О Ventura'."""
+    """Обработчик inline-кнопки 'Выход' из экрана 'О Ventura'."""
     query = update.callback_query
     await query.answer()
 
-    # Возвращаемся к сообщению приветствия
+    # Удаляем сообщение при выходе
     try:
-        await query.edit_message_text(
-            text=query.message.text,
-            parse_mode="Markdown",
-            reply_markup=about_ventura_inline(),
-        )
+        await query.message.delete()
     except Exception:
         pass
 

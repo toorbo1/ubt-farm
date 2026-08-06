@@ -114,9 +114,9 @@ def about_ventura_inline() -> InlineKeyboardMarkup:
 
 
 def about_ventura_back_inline() -> InlineKeyboardMarkup:
-    """Inline-кнопка 'Назад' для экрана 'О Ventura'."""
+    """Inline-кнопка 'Выход' для экрана 'О Ventura'."""
     kb = [[
-        InlineKeyboardButton("🔙 Назад", callback_data="about_back"),
+        InlineKeyboardButton("❌ Выход", callback_data="about_back"),
     ]]
     return InlineKeyboardMarkup(kb)
 
