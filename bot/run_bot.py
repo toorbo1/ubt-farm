@@ -40,6 +40,8 @@ from bot.handlers import (
     handle_gemini_topic,
     handle_gemini_traits,
     _handle_pipeline_callback,
+    about_ventura_handler,
+    about_ventura_back_handler,
     cancel,
     error_handler,
 )
@@ -120,6 +122,9 @@ def build_app(token: str) -> Application:
     app.add_handler(CallbackQueryHandler(_handle_pipeline_callback, pattern="^pipe_"))
     # Inline-кнопки (детали VPN сервера)
     app.add_handler(CallbackQueryHandler(vpn_server_detail, pattern="^vpn_server_"))
+    # Inline-кнопки "О Ventura"
+    app.add_handler(CallbackQueryHandler(about_ventura_handler, pattern="^about_ventura$"))
+    app.add_handler(CallbackQueryHandler(about_ventura_back_handler, pattern="^about_back$"))
 
     app.add_error_handler(error_handler)
     return app

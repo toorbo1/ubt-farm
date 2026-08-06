@@ -6,7 +6,7 @@ def main_kb() -> ReplyKeyboardMarkup:
         ["✨ Создать сценарий", "🎬 Создать видео"],
         ["📦 Пакет видео", "📤 Загрузить"],
         ["📁 Список видео", "📊 Статус"],
-        ["⚙ Настройки AI", "ℹ️ О Ventura"],
+        ["⚙ Настройки AI"],
     ]
     return ReplyKeyboardMarkup(kb, resize_keyboard=True)
 
@@ -27,7 +27,6 @@ def farm_kb() -> ReplyKeyboardMarkup:
     kb = [
         ["✨ Создать сценарий", "🎬 Создать видео"],
         ["📦 Пакет видео", "📤 Загрузить"],
-        ["ℹ️ О Ventura"],
         ["🔙 В главное меню"],
     ]
     return ReplyKeyboardMarkup(kb, resize_keyboard=True)
@@ -46,7 +45,6 @@ def ai_models_kb() -> ReplyKeyboardMarkup:
     kb = [
         ["🧠 Сценарий (LLM)", "🖼 Картинки (Image)"],
         ["🎥 Видео (Video)", "⚙ Локальные настройки"],
-        ["ℹ️ О Ventura"],
         ["🔙 В ферму"],
     ]
     return ReplyKeyboardMarkup(kb, resize_keyboard=True)
@@ -107,12 +105,20 @@ def remove_kb() -> ReplyKeyboardRemove:
     return ReplyKeyboardRemove()
 
 
-def about_ventura_kb() -> ReplyKeyboardMarkup:
-    """Клавиатура для экрана 'О Ventura' — только кнопка Назад."""
-    kb = [
-        ["🔙 Назад"],
-    ]
-    return ReplyKeyboardMarkup(kb, resize_keyboard=True)
+def about_ventura_inline() -> InlineKeyboardMarkup:
+    """Inline-кнопка 'О Ventura' для сообщения."""
+    kb = [[
+        InlineKeyboardButton("ℹ️ О Ventura", callback_data="about_ventura"),
+    ]]
+    return InlineKeyboardMarkup(kb)
+
+
+def about_ventura_back_inline() -> InlineKeyboardMarkup:
+    """Inline-кнопка 'Назад' для экрана 'О Ventura'."""
+    kb = [[
+        InlineKeyboardButton("🔙 Назад", callback_data="about_back"),
+    ]]
+    return InlineKeyboardMarkup(kb)
 
 
 def vpn_servers_inline(servers: list[dict]) -> InlineKeyboardMarkup:

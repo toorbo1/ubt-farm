@@ -34,7 +34,8 @@ from .keyboards import (
     ai_models_kb,
     video_provider_kb,
     gemini_script_kb,
-    about_ventura_kb,
+    about_ventura_inline,
+    about_ventura_back_inline,
 )
 from .vpn_handlers import vpn_fetch_data
 from core.gemini_client import GeminiClient
@@ -91,7 +92,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         f"\n"
         f"Просто нажимай кнопки внизу ⬇",
         parse_mode="Markdown",
-        reply_markup=main_kb(),
+        reply_markup=about_ventura_inline(),
     )
 
 
@@ -133,17 +134,6 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         return
 
     if text == "🔙 Назад":
-        if section == "about":
-            context.user_data["section"] = S_MAIN
-            # Редактируем текущее сообщение вместо создания нового
-            try:
-                await update.message.edit_text(
-                    "Главное меню:",
-                    reply_markup=main_kb(),
-                )
-            except Exception:
-                await update.message.reply_text("Главное меню:", reply_markup=main_kb())
-            return
         if section == "gemini_script":
             context.user_data["section"] = S_FARM
             context.user_data.pop("gemini_topic", None)
@@ -226,40 +216,6 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     if text == "📊 Статус":
         await update.message.reply_text("📊 *Статус*\n\nБот готов к работе!")
-        return
-
-    if text == "ℹ️ О Ventura":
-        context.user_data["section"] = "about"
-        # Редактируем текущее сообщение вместо создания нового
-        try:
-            await update.message.edit_text(
-                f"ℹ️ *О Ventura*\n\n"
-                f"Ventura — это бот для создания вирусных видео с помощью ИИ.\n\n"
-                f"✨ *Возможности:*\n"
-                f"• Генерация сценариев через Gemini AI\n"
-                f"• Создание изображений\n"
-                f"• Сборка видео с озвучкой\n"
-                f"• Пакетная обработка\n"
-                f"• Загрузка на платформы\n\n"
-                f"Нажми '🔙 Назад' чтобы вернуться.",
-                parse_mode="Markdown",
-                reply_markup=about_ventura_kb(),
-            )
-        except Exception:
-            # Если не удалось редактировать, отправляем новое
-            await update.message.reply_text(
-                f"ℹ️ *О Ventura*\n\n"
-                f"Ventura — это бот для создания вирусных видео с помощью ИИ.\n\n"
-                f"✨ *Возможности:*\n"
-                f"• Генерация сценариев через Gemini AI\n"
-                f"• Создание изображений\n"
-                f"• Сборка видео с озвучкой\n"
-                f"• Пакетная обработка\n"
-                f"• Загрузка на платформы\n\n"
-                f"Нажми '🔙 Назад' чтобы вернуться.",
-                parse_mode="Markdown",
-                reply_markup=about_ventura_kb(),
-            )
         return
 
     if text == "⚙ Настройки AI":
@@ -1100,6 +1056,50 @@ async def _run_gemini_to_video(
         )
     finally:
         await builder.cleanup()
+
+
+async def about_ventura_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обработчик inline-кнопки 'О Ventura'."""
+    query = update.callback_query
+    await query.answer()
+
+    text = (
+        f"ℹ️ *О Ventura*\n\n"
+        f"Ventura — это бот для создания вирусных видео с помощью ИИ.\n\n"
+        f"✨ *Возможности:*\n"
+        f"• Генерация сценариев через Gemini AI\n"
+        f"• Создание изображений\n"
+        f"• Сборка видео с озвучкой\n"
+        f"• Пакетная обработка\n"
+        f"• Загрузка на платформы\n\n"
+        f"Нажми '🔙 Назад' чтобы вернуться."
+    )
+
+    # Редактируем сообщение вместо создания нового
+    try:
+        await query.edit_message_text(
+            text=text,
+            parse_mode="Markdown",
+            reply_markup=about_ventura_back_inline(),
+        )
+    except Exception:
+        await query.message.reply_text(text, parse_mode="Markdown", reply_markup=about_ventura_back_inline())
+
+
+async def about_ventura_back_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обработчик inline-кнопки 'Назад' из экрана 'О Ventura'."""
+    query = update.callback_query
+    await query.answer()
+
+    # Возвращаемся к сообщению приветствия
+    try:
+        await query.edit_message_text(
+            text=query.message.text,
+            parse_mode="Markdown",
+            reply_markup=about_ventura_inline(),
+        )
+    except Exception:
+        pass
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
